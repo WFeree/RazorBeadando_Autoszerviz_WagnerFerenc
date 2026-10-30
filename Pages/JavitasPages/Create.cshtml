@@ -1,0 +1,43 @@
+@page
+@model RazorBeadando_Autoszerviz_WagnerFerenc.Pages.JavitasPages.CreateModel
+<h2>Új javítás</h2>
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-2">
+        <label asp-for="Javitasok.UgyfelId"></label>
+        <select asp-for="Javitasok.UgyfelId" asp-items="Model.ClientList" class="form-select">
+            <option value="">-- Select client --</option>
+        </select>
+        <span asp-validation-for="Javitasok.UgyfelId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Javitasok.Rendszam"></label>
+        <input asp-for="Javitasok.Rendszam" class="form-control" placeholder="ABC-123" />
+        <span asp-validation-for="Javitasok.Rendszam" class="text-danger"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Javitasok.Leiras"></label>
+        <textarea asp-for="Javitasok.Leiras" class="form-control"></textarea>
+        <span asp-validation-for="Javitasok.Leiras" class="text-danger"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Javitasok.Koltseg"></label>
+        <input asp-for="Javitasok.Koltseg" class="form-control" />
+        <span asp-validation-for="Javitasok.Koltseg" class="text-danger"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Javitasok.Allapot"></label>
+        <select asp-for="Javitasok.Allapot" asp-items="Html.GetEnumSelectList<RazorBeadando_Autoszerviz_WagnerFerenc.Models.Allapot>()" class="form-select"></select>
+    </div>
+
+    <button class="btn btn-success">Mentés</button>
+    <a asp-page="Index">Vissza</a>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

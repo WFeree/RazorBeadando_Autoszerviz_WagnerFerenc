@@ -1,0 +1,44 @@
+@page
+@model RazorBeadando_Autoszerviz_WagnerFerenc.Pages.JavitasPages.EditModel
+<h2>Javítás szerkesztése</h2>
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Javitas.Id" />
+    <input type="hidden" asp-for="Javitas.Hozzaadva" />
+    <div class="mb-2">
+        <label asp-for="Javitas.UgyfelId"></label>
+        <select asp-for="Javitas.UgyfelId" asp-items="Model.ClientList" class="form-select">
+            <option value="">-- Select client --</option>
+        </select>
+        <span asp-validation-for="Javitas.UgyfelId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Javitas.Rendszam"></label>
+        <input asp-for="Javitas.Rendszam" class="form-control" placeholder="ABC-123" />
+        <span asp-validation-for="Javitas.Rendszam" class="text-danger"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Javitas.Leiras"></label>
+        <textarea asp-for="Javitas.Leiras" class="form-control"></textarea>
+        <span asp-validation-for="Javitas.Leiras" class="text-danger"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Javitas.Koltseg"></label>
+        <input asp-for="Javitas.Koltseg" type="number" step="0.01" class="form-control" />
+        <span asp-validation-for="Javitas.Koltseg" class="text-danger"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Javitas.Allapot"></label>
+        <select asp-for="Javitas.Allapot" asp-items="Html.GetEnumSelectList<RazorBeadando_Autoszerviz_WagnerFerenc.Models.Allapot>()" class="form-select"></select>
+    </div>
+
+    <button class="btn btn-success">Mentés</button>
+    <a asp-page="Index">Vissza</a>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
