@@ -8,32 +8,18 @@ namespace RazorBeadando_Autoszerviz_WagnerFerenc.Pages.UgyfelPages;
 
 public class CreateModel : PageModel
 {
-    private readonly AppDbContext _context;
+    private readonly AppDbContext _db;
+    public CreateModel(AppDbContext db) => _db = db;
 
-    public CreateModel(AppDbContext context)
-    {
-        _context = context;
-    }
+    [BindProperty] public Ugyfel Ugyfel { get; set; } = new();
 
-    public IActionResult OnGet()
-    {
-        return Page();
-    }
+    public void OnGet() { }
 
-    [BindProperty]
-    public Ugyfel Ugyfel { get; set; } = default!;
-
-    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD.
     public async Task<IActionResult> OnPostAsync()
     {
-        if (!ModelState.IsValid)
-        {
-            return Page();
-        }
-
-        _context.Ugyfelek.Add(Ugyfel);
-        await _context.SaveChangesAsync();
-
-        return RedirectToPage("./Index");
+        if (!ModelState.IsValid) return Page();
+        _db.Ugyfelek.Add(Ugyfel);
+        await _db.SaveChangesAsync();
+        return RedirectToPage("Index");
     }
 }

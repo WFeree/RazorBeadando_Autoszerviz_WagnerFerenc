@@ -1,54 +1,24 @@
 @page
 @model RazorBeadando_Autoszerviz_WagnerFerenc.Pages.UgyfelPages.IndexModel
-
-@{
-    ViewData["Title"] = "Index";
+<h2>Ügyfelek</h2>
+<a asp-page="Create" class="btn btn-primary mb-2">Ügyfél hozzáadása</a>
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
 }
-
-<h1>Index</h1>
-
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
 <table class="table">
-    <thead>
+    <tr><th>Név</th><th>Telefonszám</th><th>Email</th><th></th></tr>
+    @foreach (var c in Model.Ugyfelek)
+    {
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Ugyfel[0].Nev)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ugyfel[0].Telefonszam)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ugyfel[0].Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ugyfel[0].Javitasok)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Ugyfel) {
-        <tr>
+            <td>@c.Nev</td>
+            <td>@c.Telefonszam</td>
+            <td>@c.Email</td>
             <td>
-                @Html.DisplayFor(model => item.Nev)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Telefonszam)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Javitasok)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-page="Details" asp-route-id="@c.Id">Részletek</a> |
+                <a asp-page="Edit" asp-route-id="@c.Id">Szerkesztés</a> |
+                <a asp-page="Delete" asp-route-id="@c.Id">Törlés</a>
             </td>
         </tr>
-}
-    </tbody>
+    }
 </table>

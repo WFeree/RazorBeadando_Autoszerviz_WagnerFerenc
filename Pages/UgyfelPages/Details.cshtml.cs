@@ -8,31 +8,19 @@ namespace RazorBeadando_Autoszerviz_WagnerFerenc.Pages.UgyfelPages;
 
 public class DetailsModel : PageModel
 {
-    private readonly AppDbContext _context;
-    public DetailsModel(AppDbContext context)
+    private readonly AppDbContext _db;
+    public DetailsModel(AppDbContext db) => _db = db;
+
+    public Ugyfel Ugyfel { get; set; } = new();
+    public decimal SumPrice => Ugyfel.Javitasok.Sum(s => s.Koltseg);
+
+    public async Task<IActionResult> OnGetAsync(int id)
     {
-        _context = context;
-    }
-
-    public Ugyfel Ugyfel { get; set; } = default!;
-
-    public async Task<IActionResult> OnGetAsync(int? id)
-    {
-        if (id is null)
-        {
-            return NotFound();
-        }
-
-        var ugyfel = await _context.Ugyfelek.FirstOrDefaultAsync(m => m.Id == id);
-        if (ugyfel is null)
-        {
-            return NotFound();
-        }
-        else
-        {
-            Ugyfel = ugyfel;
-        }
-
+        var u = await _db.Ugyfelek
+            .Include(u => u.Javitasok)
+            .FirstOrDefaultAsync(u => u.Id == id);
+        if (u == null) return NotFound();
+        Ugyfel = u;
         return Page();
     }
 }

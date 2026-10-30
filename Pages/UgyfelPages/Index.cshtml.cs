@@ -8,17 +8,11 @@ namespace RazorBeadando_Autoszerviz_WagnerFerenc.Pages.UgyfelPages;
 
 public class IndexModel : PageModel
 {
-    private readonly AppDbContext _context;
+    private readonly AppDbContext _db;
+    public IndexModel(AppDbContext db) => _db = db;
 
-    public IndexModel(AppDbContext context)
-    {
-        _context = context;
-    }
+    public List<Ugyfel> Ugyfelek { get; set; } = new();
 
-    public IList<Ugyfel> Ugyfel { get; set; } = default!;
-
-    public async Task OnGetAsync()
-    {
-        Ugyfel = await _context.Ugyfelek.ToListAsync();
-    }
+    public async Task OnGetAsync() =>
+        Ugyfelek = await _db.Ugyfelek.OrderBy(u => u.Nev).ToListAsync();
 }

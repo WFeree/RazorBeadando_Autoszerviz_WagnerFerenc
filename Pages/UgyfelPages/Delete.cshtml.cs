@@ -8,51 +8,32 @@ namespace RazorBeadando_Autoszerviz_WagnerFerenc.Pages.UgyfelPages;
 
 public class DeleteModel : PageModel
 {
-    private readonly AppDbContext _context;
+    private readonly AppDbContext _db;
+    public DeleteModel(AppDbContext db) => _db = db;
 
-    public DeleteModel(AppDbContext context)
+    public Ugyfel Ugyfel { get; set; } = new();
+
+    public async Task<IActionResult> OnGetAsync(int id)
     {
-        _context = context;
-    }
-
-    [BindProperty]
-    public Ugyfel Ugyfel { get; set; } = default!;
-
-    public async Task<IActionResult> OnGetAsync(int? id)
-    {
-        if (id is null)
-        {
-            return NotFound();
-        }
-
-        var ugyfel = await _context.Ugyfelek.FirstOrDefaultAsync(m => m.Id == id);
-        if (ugyfel is null)
-        {
-            return NotFound();
-        }
-        else
-        {
-            Ugyfel = ugyfel;
-        }
-
+        var u = await _db.Ugyfelek.FindAsync(id);
+        if (u == null) return NotFound();
+        Ugyfel = u;
         return Page();
     }
 
-    public async Task<IActionResult> OnPostAsync(int? id)
+    public async Task<IActionResult> OnPostAsync(int id)
     {
-        if (id is null)
+        var ugyfel = await _db.Ugyfelek.FindAsync(id);
+        if (ugyfel == null) return NotFound();
+
+        if (await _db.Javitasok.AnyAsync(s => s.UgyfelId == id))
         {
-            return NotFound();
+            TempData["Error"] = $"{ugyfel.Nev} nem lehet törölni: van hozzá rendelt javítás.";
+            return RedirectToPage("Index");
         }
 
-        var ugyfel = await _context.Ugyfelek.FindAsync(id);
-        if (ugyfel != null)
-        {
-            Ugyfel = ugyfel;
-            _context.Ugyfelek.Remove(Ugyfel);
-            await _context.SaveChangesAsync();
-        }
-
-        return RedirectToPage("./Index");
+        _db.Ugyfelek.Remove(ugyfel);
+        await _db.SaveChangesAsync();
+        return RedirectToPage("Index");
     }
 }
